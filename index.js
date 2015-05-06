@@ -24,7 +24,7 @@ app.get('/', function (req, res) {
 
 app.use('/web', express.static(__dirname+'/lib/app/web'));
 
-io.on('connection', function (socket) {
+io.sockets.on('connection', function (socket) {
   socket.on('chat message', function (data) {
     io.emit('chat message', data);
   });
