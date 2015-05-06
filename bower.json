@@ -1,0 +1,30 @@
+{
+  "name": "seca",
+  "main": "index.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/voodoo-chile/seca",
+  "authors": [
+    "voodoo <voodoo@blackandyellowpages.com>"
+  ],
+  "description": "A simple encrypted chat application",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "nodejs",
+    "encrypted",
+    "chat"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap-validator": "~0.8.1"
+  }
+}

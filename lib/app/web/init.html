@@ -1,16 +1,38 @@
 <!doctype html>
 <html>
   <head>
-    <title>Create a new User</title>
-    <!-- <link href="/web/app.css" rel="stylesheet" type="text/css"/> -->
+    <title>Welcome to SECA :: Create a User</title>
+    <link href="/vendor/bootstrap-3.3.4-dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap-validator/dist/validator.js"></script>
   </head>
   <body>
-    <p>It appears that this is the first time you have used SECA. To begin, you must create a user and password.</p>
-    <form action="">
-      <strong>Username:</strong><input id="user" autocomplete="off" /><br />
-      <strong>Password:</strong><input type="password" id="password" /><br />
-      <strong>Password again:</strong><input type="password" id="password-confirm" /><br />
-      <button>Go!</button>
-    </form>
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">  
+        <h2>Welcome to SECA, the simple encrypted chat application</h2>  
+        <p>It appears that this is the first time you have used SECA. To begin, we need to create a user account that will contain all your personal settings and files. Please enter a unique name to identify this account and set a strong password for it.</p>
+        <form action="" id="userform">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input name="username" class="form-control" id="username" required data-error="The account must have a distinctive username"/>
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" name="password" class="form-control" id="password" required data-error="Make this a strong password for your security" />
+            <div class="help-block with-errors"></div>
+          </div>
+          <div class="form-group">
+            <label for="password_confirmation">Password Confirmation:</label>
+            <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" data-match="#password" data-match-error="The passwords must match" />
+            <div class="help-block with-errors"></div>
+          </div>
+          <button type="submit" class="btn btn-primary">Next Step >></button>
+        </form>
+      </div>
+    </div>
+    <script>
+      $("#userform").validator();
+    </script>
   </body>
 </html>
