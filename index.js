@@ -23,6 +23,9 @@ app.get('/', function (req, res) {
 });
 
 app.use('/web', express.static(__dirname+'/lib/app/web'));
+app.use('/vendor', express.static(__dirname+'/vendor'));
+app.use('/node_modules', express.static(__dirname+'/node_modules'))
+
 
 io.sockets.on('connection', function (socket) {
   socket.on('chat message', function (data) {
