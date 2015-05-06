@@ -1,0 +1,43 @@
+{
+  "name": "seca",
+  "version": "0.0.1",
+  "description": "A simple encrypted chat application",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/voodoo-chile/seca"
+  },
+  "keywords": [
+    "encrypted",
+    "xmpp",
+    "nodejs",
+    "p2p"
+  ],
+  "author": "voodoo-chile",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/voodoo-chile/seca/issues"
+  },
+  "homepage": "https://github.com/voodoo-chile/seca",
+  "dependencies": {
+    "express": "^4.12.3",
+    "jade": "^1.9.2",
+    "socket.io": "^1.3.5"
+  },
+  "devDependencies": {
+    "cucumber": "^0.4.8",
+    "glob": "^5.0.5",
+    "mocha": "^2.2.4",
+    "should": "^6.0.1",
+    "zombie": "^3.1.1"
+  },
+  "engines": {
+    "node": "0.10.38"
+  }
+}

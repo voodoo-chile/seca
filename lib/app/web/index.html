@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <title>SECA</title>
+    <link href="/web/app.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <div id="utility">
+      <div id="status"></div>
+      <form action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
+    <script>
+      var socket = io();
+      var nick = window.prompt("Choose a nickname");
+      $('#m').focus();
+      $('form').submit(function(){
+        socket.emit('chat message', {
+          nick: nick, 
+          msg: $('#m').val()
+        });
+        $('#m').val('');
+        return false;
+      });
+      $('#m').on("keyup", function (event) {
+        socket.emit("typing", {
+          nick: nick
+        });
+      });
+      socket.on('chat message', function (data) {
+        $('#messages').append($('<li>')
+          .append($('<strong>').text(data.nick + ": "))
+          .append($('<span>').text(data.msg))
+        );
+      });
+      socket.on('typing', function (data) {
+        $('#status').html(data.nick + " is typing");
+        setTimeout(function () {
+          $("#status").html('');
+        }, 3000);
+      });
+    </script>
+  </body>
+</html>
