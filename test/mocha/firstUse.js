@@ -1,6 +1,8 @@
 var Browser = require('zombie');
 var should = require('should');
 var glob = require('glob');
+var fs = require('fs');
+var path = require('path');
 
 Browser.localhost('seca.io', 3000);
 
@@ -9,15 +11,20 @@ describe('Web application', function () {
   const browser = new Browser();
 
   before(function (done) {
-    var fs = require('fs');
-    var path = require('path');
-  
     fs.readdirSync('./data').forEach(function(fileName) {
       if (path.extname(fileName) === ".user") {
         fs.unlinkSync('data/' + fileName);
       }
     });
     browser.visit('/', done);
+  });
+
+  after(function () {
+    fs.readdirSync('./data').forEach(function(fileName) {
+      if (path.extname(fileName) === ".user") {
+        fs.unlinkSync('data/' + fileName);
+      }
+    });
   });
 
   describe('when connected for the first time', function () {
@@ -109,6 +116,11 @@ describe('Web application', function () {
             done();
           }
         });              
+      });
+
+      it('results in the "first role" prompt', function () {
+        browser.assert.success();
+        browser.assert.text('title', 'Welcome to SECA player1 :: Create a Role');
       });
 
     });

@@ -1,8 +1,10 @@
 var Browser = require('zombie');
-var should = require('should');
-var glob = require('glob');
-var fs = require('fs');
 var crypto = require('crypto');
+var fs = require('fs');
+var glob = require('glob');
+var path = require('path');
+var should = require('should');
+
 var algorithm = 'aes-256-ctr';
 
 function encrypt (text, algorithm, password) {
@@ -29,8 +31,6 @@ describe('user file', function () {
   var fileName = 'data/' + user + '.user';
 
   before(function (done) {
-    var path = require('path');
-
     fs.readdirSync('./data').forEach(function(fileName) {
       if (path.extname(fileName) === ".user") {
         fs.unlinkSync('data/' + fileName);
@@ -42,6 +42,14 @@ describe('user file', function () {
         .fill('form input[name=password]', password)
         .fill('form input[name=password_confirmation]', password)
         .pressButton("Next Step >>", done);
+    });
+  });
+
+  after(function () {
+    fs.readdirSync('./data').forEach(function(fileName) {
+      if (path.extname(fileName) === ".user") {
+        fs.unlinkSync('data/' + fileName);
+      }
     });
   });
 
@@ -57,7 +65,7 @@ describe('user file', function () {
     })
   });
   
-  it('is encrypted', function () {
+  it('is encrypted', function (done) {
     fs.readFile(fileName, 'utf8', function (er, data) {
       if (er) {
         throw new Error(er);
@@ -68,6 +76,7 @@ describe('user file', function () {
         var jsonText = JSON.stringify(userObject);
         var matchText = encrypt(jsonText, algorithm, password);
         data.should.equal(matchText);
+        done();
       }
     });
   });

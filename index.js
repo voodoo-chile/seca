@@ -23,7 +23,10 @@ function decrypt (cipherText, algorithm, password) {
   return plainText;
 }
 
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 app.set('views', __dirname + '/lib/app/web/views');
 
@@ -51,8 +54,7 @@ app.post('/', function (req, res) {
   var plainText = JSON.stringify(userObject);
   var cipherText = encrypt(plainText, algorithm, req.body.password);
   fs.writeFile(fileName, cipherText);
-  var html = "Hello: " + userName + '.<br>' + '<a href="/">Try again.</a>';
-  res.send(html);
+  res.sendFile(__dirname + '/lib/app/web/firstrole.html');
 });
 
 app.use('/web', express.static(__dirname+'/lib/app/web'));
