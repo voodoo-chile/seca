@@ -4,6 +4,26 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var role = require('./role.js');
 var glob = require('glob');
+var bodyParser = require('body-parser');
+var fs = require('fs');
+var crypto = require('crypto');
+var algorithm = 'aes-256-ctr';
+
+function encrypt (text, algorithm, password) {
+  var cipher = crypto.createCipher(algorithm, password);
+  var crypted = cipher.update(text, 'utf8', 'hex');
+  crypted += cipher.final('hex');
+  return crypted;
+}
+
+function decrypt (cipherText, algorithm, password) {
+  var decipher = crypto.createDecipher(algorithm, password);
+  var plainText = decipher.update(cipherText,'hex','utf8');
+  plainText += decipher.final('utf8');
+  return plainText;
+}
+
+app.use(bodyParser());
 
 app.set('views', __dirname + '/lib/app/web/views');
 
@@ -20,6 +40,19 @@ app.get('/', function (req, res) {
     }
   });
   
+});
+
+app.post('/', function (req, res) {
+  var userName = req.body.username;
+  var fileName = "data/" + req.body.username + ".user";
+  var userObject = {
+    username : req.body.username
+  }
+  var plainText = JSON.stringify(userObject);
+  var cipherText = encrypt(plainText, algorithm, req.body.password);
+  fs.writeFile(fileName, cipherText);
+  var html = "Hello: " + userName + '.<br>' + '<a href="/">Try again.</a>';
+  res.send(html);
 });
 
 app.use('/web', express.static(__dirname+'/lib/app/web'));

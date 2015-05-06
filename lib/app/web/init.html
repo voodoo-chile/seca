@@ -11,7 +11,7 @@
       <div class="col-md-4 col-md-offset-4">  
         <h2>Welcome to SECA, the simple encrypted chat application</h2>  
         <p>It appears that this is the first time you have used SECA. To begin, we need to create a user account that will contain all your personal settings and files. Please enter a unique name to identify this account and set a strong password for it.</p>
-        <form action="" id="userform">
+        <form action="/" method="post" id="userform">
           <div class="form-group">
             <label for="username">Username:</label>
             <input name="username" class="form-control" id="username" required data-error="The account must have a distinctive username"/>
@@ -24,7 +24,7 @@
           </div>
           <div class="form-group">
             <label for="password_confirmation">Password Confirmation:</label>
-            <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" data-match="#password" data-match-error="The passwords must match" />
+            <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" data-match="#password" data-match-error="The passwords must match" required />
             <div class="help-block with-errors"></div>
           </div>
           <button type="submit" class="btn btn-primary">Next Step >></button>

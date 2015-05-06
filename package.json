@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/voodoo-chile/seca",
   "dependencies": {
+    "body-parser": "^1.12.3",
     "bower": "^1.4.1",
     "express": "^4.12.3",
     "glob": "^5.0.5",

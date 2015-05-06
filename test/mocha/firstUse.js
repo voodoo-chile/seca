@@ -1,8 +1,10 @@
 var Browser = require('zombie');
+var should = require('should');
+var glob = require('glob');
 
 Browser.localhost('seca.io', 3000);
 
-describe('Starting application', function () {
+describe('Web application', function () {
   
   const browser = new Browser();
 
@@ -11,7 +13,6 @@ describe('Starting application', function () {
     var path = require('path');
   
     fs.readdirSync('./data').forEach(function(fileName) {
-      console.log(fileName);
       if (path.extname(fileName) === ".user") {
         fs.unlinkSync('data/' + fileName);
       }
@@ -19,7 +20,7 @@ describe('Starting application', function () {
     browser.visit('/', done);
   });
 
-  describe('for the first time', function () {
+  describe('when connected for the first time', function () {
 
     it('results in the "first user" form', function () {
       browser.assert.text('title', 'Welcome to SECA :: Create a User');
@@ -58,6 +59,19 @@ describe('Starting application', function () {
       browser.assert.attribute('button', 'class', 'btn btn-primary disabled');
     });
 
+    it('cannot be submitted with empty passwords', function () {
+      browser
+        .fill('form input[name=username]', 'player1')
+        .fill('form input[name=password]', 'password')
+        .fill('form input[name=password_confirmation]', '');
+      browser.assert.attribute('button', 'class', 'btn btn-primary disabled');
+      browser
+        .fill('form input[name=username]', 'player1')
+        .fill('form input[name=password]', '')
+        .fill('form input[name=password_confirmation]', 'password');
+      browser.assert.attribute('button', 'class', 'btn btn-primary disabled');
+    });
+
     it('cannot be submitted with mismatched passwords', function () {
       browser
         .fill('form input[name=username]', 'player1')
@@ -72,7 +86,32 @@ describe('Starting application', function () {
         .fill('form input[name=password]', 'password')
         .fill('form input[name=password_confirmation]', 'password');
       browser.assert.attribute('button', 'class', 'btn btn-primary'); 
-    })
+    });
+
+    describe('when submitted', function () {
+      
+      before(function (done) {
+        browser
+          .fill('form input[name=username]', 'player1')
+          .fill('form input[name=password]', 'password')
+          .fill('form input[name=password_confirmation]', 'password')
+          .pressButton("Next Step >>", done);
+      });
+
+      it('creates a new user account', function (done) {
+        browser.assert.success();
+        glob("data/*.user", {}, function (er, files) {
+          if (er) {
+            throw new Error(er);
+          } else {
+            files.length.should.equal(1);
+            files[0].should.equal('data/player1.user');
+            done();
+          }
+        });              
+      });
+
+    });
 
   });
 
