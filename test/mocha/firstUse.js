@@ -4,6 +4,13 @@ var glob = require('glob');
 var fs = require('fs');
 var path = require('path');
 
+function userFormFill (browser, username, password, password_confirmation) {
+  browser
+    .fill('form input[name=username]', username)
+    .fill('form input[name=password]', password)
+    .fill('form input[name=password_confirmation]', password_confirmation);
+}
+
 Browser.localhost('seca.io', 3000);
 
 describe('Web application', function () {
@@ -52,57 +59,37 @@ describe('Web application', function () {
     });
 
     it('cannot be submitted with no username', function () {
-      browser
-        .fill('form input[name=password]', 'password')
-        .fill('form input[name=password_confirmation]', 'password');
+      userFormFill(browser, '', 'password', 'password');
       browser.assert.attribute('button', 'class', 'btn btn-primary disabled');
     });
 
     it('cannot be submitted with no passwords', function () {
-      browser
-        .fill('form input[name=username]', 'player1')
-        .fill('form input[name=password]', '')
-        .fill('form input[name=password_confirmation]', '');
+      userFormFill(browser, 'player1', '', '');
       browser.assert.attribute('button', 'class', 'btn btn-primary disabled');
     });
 
     it('cannot be submitted with empty passwords', function () {
-      browser
-        .fill('form input[name=username]', 'player1')
-        .fill('form input[name=password]', 'password')
-        .fill('form input[name=password_confirmation]', '');
+      userFormFill(browser, 'player1', 'password', '');
       browser.assert.attribute('button', 'class', 'btn btn-primary disabled');
-      browser
-        .fill('form input[name=username]', 'player1')
-        .fill('form input[name=password]', '')
-        .fill('form input[name=password_confirmation]', 'password');
+      userFormFill(browser, 'player1', '', 'password');
       browser.assert.attribute('button', 'class', 'btn btn-primary disabled');
     });
 
     it('cannot be submitted with mismatched passwords', function () {
-      browser
-        .fill('form input[name=username]', 'player1')
-        .fill('form input[name=password]', 'password')
-        .fill('form input[name=password_confirmation]', 'otherpassword');
+      userFormFill(browser, 'player1', 'password', 'otherpassword');
       browser.assert.attribute('button', 'class', 'btn btn-primary disabled');
     });
 
     it('can be submitted when all fields are filled in and the passwords match', function () {
-      browser
-        .fill('form input[name=username]', 'player1')
-        .fill('form input[name=password]', 'password')
-        .fill('form input[name=password_confirmation]', 'password');
+      userFormFill(browser, 'player1', 'password', 'password');
       browser.assert.attribute('button', 'class', 'btn btn-primary'); 
     });
 
     describe('when submitted', function () {
       
       before(function (done) {
-        browser
-          .fill('form input[name=username]', 'player1')
-          .fill('form input[name=password]', 'password')
-          .fill('form input[name=password_confirmation]', 'password')
-          .pressButton("Next Step >>", done);
+        userFormFill(browser, 'player1', 'password', 'password');
+        browser.pressButton("Next Step >>", done);
       });
 
       it('creates a new user account', function (done) {

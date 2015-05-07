@@ -21,6 +21,18 @@ function decrypt (cipherText, algorithm, password) {
   return plainText;
 }
 
+function readAndDecrypt (fileName, algorithm, password, callback) {
+  fs.readFile(fileName, 'utf8', function (er, data) {
+    if (er) {
+      throw new Error(er);
+    } else {
+      var plainText = decrypt(data, algorithm, password);
+      console.log('in rnd: ' + plainText);
+      callback(plainText);
+    }
+  });
+}
+
 Browser.localhost('seca.io', 3000);
 
 describe('user file', function () {
@@ -82,16 +94,12 @@ describe('user file', function () {
   });
 
   it('has a username property', function (done) {
-    fs.readFile(fileName, 'utf8', function (er, data) {
-      if (er) {
-        throw new Error(er)
-      } else {
-        var plainText = decrypt(data, algorithm, password);
-        var userObject = JSON.parse(plainText);
-        userObject.username.should.equal(user);
-        done();
-      }
-    })
+    readAndDecrypt(fileName, algorithm, password, function (plainText) {    
+      console.log('in callback: ' + plainText);
+      var userObject = JSON.parse(plainText);
+      userObject.username.should.equal(user);
+      done();
+    });
   });
 
 });
