@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Welcome to SECA player1 :: Create a Role</title>
+    <title>Welcome to SECA <%= username %> :: Create a Role</title>
     <link href="/vendor/bootstrap-3.3.4-dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/bootstrap-validator/dist/validator.js"></script>
@@ -9,7 +9,7 @@
   <body>
     <div class="row">
       <div class="col-md-4 col-md-offset-4">  
-        <h2>Way to go, player1! Now we need to create your first role.</h2>  
+        <h2>Way to go, <%= username %>! Now we need to create your first role.</h2>  
         <p>We act very differently around friends and family than we do with business contacts and even co-workers. SECA makes it very easy to "sandbox" your online interations with people into roles. That way you can be the doting grandchild with grandma and still maintain an air of aloof superiority with your colleagues.</p>
         <p>You can create as many roles as you like, but for now let's just create one. You can call it "work" or "family" and assign a display name; that's the name that others will see when you use this role.</p>
         <form action="/" method="post" id="userform">

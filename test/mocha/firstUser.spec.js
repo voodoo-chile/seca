@@ -87,8 +87,12 @@ describe('Web application', function () {
 
     describe('when submitted', function () {
       
+      var user = 'secaUser';
+      var password = 'password';
+      var password_confirmation = 'password';
+
       before(function (done) {
-        userFormFill(browser, 'player1', 'password', 'password');
+        userFormFill(browser, user, password, password_confirmation);
         browser.pressButton("Next Step >>", done);
       });
 
@@ -99,7 +103,7 @@ describe('Web application', function () {
             throw new Error(er);
           } else {
             files.length.should.equal(1);
-            files[0].should.equal('data/player1.user');
+            files[0].should.equal('data/' + user + '.user');
             done();
           }
         });              
@@ -107,7 +111,7 @@ describe('Web application', function () {
 
       it('results in the "first role" prompt', function () {
         browser.assert.success();
-        browser.assert.text('title', 'Welcome to SECA player1 :: Create a Role');
+        browser.assert.text('title', 'Welcome to SECA ' + user + ' :: Create a Role');
       });
 
     });

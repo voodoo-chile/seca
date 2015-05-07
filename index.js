@@ -23,12 +23,15 @@ function decrypt (cipherText, algorithm, password) {
   return plainText;
 }
 
+//app.use(express.cookieParser());
+//app.use(express.session({secret: 'SECA is awesome!'}));
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
 
-app.set('views', __dirname + '/lib/app/web/views');
+app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
   glob("data/*.user", {}, function (er, files) {
@@ -36,16 +39,16 @@ app.get('/', function (req, res) {
       throw new Error(er);
     } else {
       if (files.length > 0) {
-        res.sendFile(__dirname + '/lib/app/web/index.html');
+        res.render('pages/index');
       } else {
-        res.sendFile(__dirname + '/lib/app/web/init.html');
+        res.render('pages/firstUser');
       }
     }
   });
   
 });
 
-app.post('/', function (req, res) {
+app.post('/user', function (req, res) {
   var userName = req.body.username;
   var fileName = "data/" + req.body.username + ".user";
   var userObject = {
@@ -54,7 +57,9 @@ app.post('/', function (req, res) {
   var plainText = JSON.stringify(userObject);
   var cipherText = encrypt(plainText, algorithm, req.body.password);
   fs.writeFile(fileName, cipherText);
-  res.sendFile(__dirname + '/lib/app/web/firstrole.html');
+  res.render('pages/firstRole', {
+    username: req.body.username
+  });
 });
 
 app.use('/web', express.static(__dirname+'/lib/app/web'));

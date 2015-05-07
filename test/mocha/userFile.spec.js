@@ -27,7 +27,6 @@ function readAndDecrypt (fileName, algorithm, password, callback) {
       throw new Error(er);
     } else {
       var plainText = decrypt(data, algorithm, password);
-      console.log('in rnd: ' + plainText);
       callback(plainText);
     }
   });
@@ -94,8 +93,7 @@ describe('user file', function () {
   });
 
   it('has a username property', function (done) {
-    readAndDecrypt(fileName, algorithm, password, function (plainText) {    
-      console.log('in callback: ' + plainText);
+    readAndDecrypt(fileName, algorithm, password, function (plainText) {
       var userObject = JSON.parse(plainText);
       userObject.username.should.equal(user);
       done();
