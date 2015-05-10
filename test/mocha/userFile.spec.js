@@ -1,36 +1,9 @@
 var Browser = require('zombie');
-var crypto = require('crypto');
 var fs = require('fs');
 var glob = require('glob');
 var path = require('path');
 var should = require('should');
-
-var algorithm = 'aes-256-ctr';
-
-function encrypt (text, algorithm, password) {
-  var cipher = crypto.createCipher(algorithm, password);
-  var crypted = cipher.update(text, 'utf8', 'hex');
-  crypted += cipher.final('hex');
-  return crypted;
-}
-
-function decrypt (cipherText, algorithm, password) {
-  var decipher = crypto.createDecipher(algorithm, password);
-  var plainText = decipher.update(cipherText,'hex','utf8');
-  plainText += decipher.final('utf8');
-  return plainText;
-}
-
-function readAndDecrypt (fileName, algorithm, password, callback) {
-  fs.readFile(fileName, 'utf8', function (er, data) {
-    if (er) {
-      throw new Error(er);
-    } else {
-      var plainText = decrypt(data, algorithm, password);
-      callback(plainText);
-    }
-  });
-}
+var app = require('../../lib/app/app');
 
 Browser.localhost('seca.io', 3000);
 
@@ -39,7 +12,10 @@ describe('user file', function () {
   const browser = new Browser();
   var user = 'player1';
   var password = 'password';
+  var roleName = 'Work';
+  var displayName = 'SECAdev';
   var fileName = 'data/' + user + '.user';
+  var userObject;
 
   before(function (done) {
     fs.readdirSync('./data').forEach(function(fileName) {
@@ -47,6 +23,7 @@ describe('user file', function () {
         fs.unlinkSync('data/' + fileName);
       }
     });
+    app.listen(3000);
     browser.visit('/', function () {      
       browser
         .fill('form input[name=username]', user)
@@ -57,6 +34,7 @@ describe('user file', function () {
   });
 
   after(function () {
+    app.close();
     fs.readdirSync('./data').forEach(function(fileName) {
       if (path.extname(fileName) === ".user") {
         fs.unlinkSync('data/' + fileName);
@@ -75,29 +53,72 @@ describe('user file', function () {
       }
     })
   });
-  
-  it('is encrypted', function (done) {
-    fs.readFile(fileName, 'utf8', function (er, data) {
-      if (er) {
-        throw new Error(er);
-      } else {
-        var userObject = {
-          username : user
-        };
-        var jsonText = JSON.stringify(userObject);
-        var matchText = encrypt(jsonText, algorithm, password);
-        data.should.equal(matchText);
-        done();
-      }
+
+  describe('user object', function () {
+
+    var userObject;
+
+    before(function (done) {
+      fs.readFile(fileName, 'utf8', function (er, data) {
+        if (er) {
+          throw new Error(er);
+        } else {
+          userObject = JSON.parse(data);
+          done();
+        }
+      });
     });
+
+    it('has a username property', function () {
+      userObject.userName.should.equal(user);
+    });
+
+    it('has a roles property', function () {
+      userObject.roles.should.not.be.undefined;
+    });
+
+    describe('role', function () {
+      var role;
+
+      before(function (done) {
+        browser
+          .fill('form input[name=rolename]', roleName)
+          .fill('form input[name=displayname]', displayName)
+          .pressButton('Finish', function () {
+            fs.readFile(fileName, 'utf8', function (er, data) {
+              if (er) {
+                throw new Error(er);
+              } else {
+                role = JSON.parse(data).roles[0];
+                done();
+              }
+            });
+          });
+      });
+
+      it('has a roleName property', function () {
+        role.roleName.should.equal(roleName);
+      });
+
+      it('has a displayName property', function () {
+        role.displayName.should.equal(displayName);
+      });
+
+      it('has a keys property', function () {
+        role.keys.should.not.be.undefined;
+      });
+
+      it('has a private key', function () {
+        role.keys.privKey.should.not.be.undefined;
+      });
+
+      it('has a public key', function () {
+        role.keys.pubKey.should.not.be.undefined;
+      });
+
+    });
+
   });
 
-  it('has a username property', function (done) {
-    readAndDecrypt(fileName, algorithm, password, function (plainText) {
-      var userObject = JSON.parse(plainText);
-      userObject.username.should.equal(user);
-      done();
-    });
-  });
 
 });

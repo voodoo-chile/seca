@@ -3,6 +3,7 @@ var should = require('should');
 var glob = require('glob');
 var fs = require('fs');
 var path = require('path');
+var app = require('../../lib/app/app');
 
 function userFormFill (browser, username, password, password_confirmation) {
   browser
@@ -23,10 +24,12 @@ describe('Web application', function () {
         fs.unlinkSync('data/' + fileName);
       }
     });
+    app.listen(3000);
     browser.visit('/', done);
   });
 
   after(function () {
+    app.close();
     fs.readdirSync('./data').forEach(function(fileName) {
       if (path.extname(fileName) === ".user") {
         fs.unlinkSync('data/' + fileName);

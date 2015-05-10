@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>SECA</title>
-    <link href="/web/app.css" rel="stylesheet" type="text/css"/>
+    <link href="public/stylesheets/app.css" rel="stylesheet" type="text/css"/>
     <script src="/socket.io/socket.io.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
   </head>
@@ -16,11 +16,10 @@
     </div>
     <script>
       var socket = io();
-      var nick = window.prompt("Choose a nickname");
       $('#m').focus();
       $('form').submit(function(){
         socket.emit('chat message', {
-          nick: nick, 
+          nick: '<%= nick %>', 
           msg: $('#m').val()
         });
         $('#m').val('');
@@ -28,7 +27,7 @@
       });
       $('#m').on("keyup", function (event) {
         socket.emit("typing", {
-          nick: nick
+          nick: '<%= nick %>'
         });
       });
       socket.on('chat message', function (data) {

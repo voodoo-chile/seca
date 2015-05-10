@@ -12,23 +12,24 @@
         <h2>Way to go, <%= username %>! Now we need to create your first role.</h2>  
         <p>We act very differently around friends and family than we do with business contacts and even co-workers. SECA makes it very easy to "sandbox" your online interations with people into roles. That way you can be the doting grandchild with grandma and still maintain an air of aloof superiority with your colleagues.</p>
         <p>You can create as many roles as you like, but for now let's just create one. You can call it "work" or "family" and assign a display name; that's the name that others will see when you use this role.</p>
-        <form action="/" method="post" id="userform">
+        <form action="/role" method="post" id="roleform">
           <div class="form-group">
-            <label for="username">Rolename:</label>
-            <input name="username" class="form-control" id="username" required data-error="This is the name you use for this role, like 'work' or 'home'"/>
+            <label for="rolename">Rolename:</label>
+            <input name="rolename" class="form-control" id="rolename" required data-error="This is the name you use for this role, like 'work' or 'home'"/>
             <div class="help-block with-errors"></div>
           </div>
           <div class="form-group">
-            <label for="username">Display Name:</label>
-            <input name="username" class="form-control" id="username" required data-error="This is the name others will see when you use this role"/>
+            <label for="displayname">Display Name:</label>
+            <input name="displayname" class="form-control" id="displayname" required data-error="This is the name others will see when you use this role"/>
             <div class="help-block with-errors"></div>
           </div>
-          <button type="submit" class="btn btn-primary">Next Step >></button>
+          <input name="username" type="hidden" value=<%= username %> />
+          <button type="submit" class="btn btn-primary">Finish</button>
         </form>
       </div>
     </div>
     <script>
-      $("#userform").validator();
+      $("#roleform").validator();
     </script>
   </body>
 </html>
