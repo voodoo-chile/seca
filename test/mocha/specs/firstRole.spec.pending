@@ -1,10 +1,8 @@
-var Browser = require('zombie');
 var crypto = require('crypto');
 var should = require('should');
 var glob = require('glob');
 var fs = require('fs');
 var path = require('path');
-var app = require('../../lib/app/app');
 
 var algorithm = 'aes-256-ctr';
 
@@ -14,11 +12,8 @@ function roleFormFill (browser, roleName, displayName) {
     .fill('form input[name=displayname]', displayName);
 }
 
-Browser.localhost('seca.io', 3000);
-
 describe('First role form', function () {
   
-  const browser = new Browser();
   var user = 'SECAuser';
   var password = 'password';
   var roleName = 'home';

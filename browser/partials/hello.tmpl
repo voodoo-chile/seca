@@ -1,0 +1,21 @@
+<form id="userform">
+
+  <!-- {{userObject}} -->
+  
+  <div class="form-group">
+    <label for="username">Username:</label>
+    <select class="form-control" ng-model="userChoice" ng-options="user for user in users"></select>
+    <div class="help-block with-errors"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password:</label>
+    <input type="password" name="password" class="form-control" id="password" required data-error="Make this a strong password for your security" ng-model="password" />
+    <div class="help-block with-errors"></div>
+  </div>
+  <button class="btn btn-primary" ng-click="createFirstUser()">Go!</button>
+</form>
+
+<h1>Hello, {{currentUser}}!</h1>
+
+<p>Your first role is {{currentRole.roleName}}, but it will be displayed as {{currentRole.displayName}}.</p>

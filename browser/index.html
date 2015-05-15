@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <title>SECA</title>
+    <script type="text/javascript" src="../node_modules/angular/angular.js"></script>
+    <script type="text/javascript" src="./scripts/app.js"></script>
+    <link href="../vendor/bootstrap-3.3.4-dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <link href="stylesheets/app.css" rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <div>
+      <div ng-controller="appCtrl">
+        <div id="partial-container">
+          {{bodyPartial}}
+          <ng-include src="bodyPartial"></ng-include>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

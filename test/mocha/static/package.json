@@ -1,0 +1,12 @@
+{
+  "name": "SECA Testing App",
+  "version": "0.0.1",
+  "main": "main.js",
+  "devDependencies": {
+    "electron-prebuilt": "^0.25.3",
+    "mocha": "^2.2.4"
+  },
+  "dependencies": {
+    "jquery": "^2.1.4"
+  }
+}

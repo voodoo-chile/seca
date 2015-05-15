@@ -1,0 +1,46 @@
+<div class="row" ng-controller="firstUserCtrl">
+  <div class="col-md-4 col-md-offset-4">  
+
+    <h2>Welcome to SECA, the simple encrypted chat application</h2>  
+    <p>It appears that this is the first time you have used SECA. To begin, we need to create a user account that will contain all your personal settings and files. Please enter a unique name to identify this account and set a strong password for it.</p>
+    <p>Your password will be used to encrypt your personal information, so make it strong and don't forget it. It cannot be recovered if you lose it.</p>
+   
+    <form id="userform" name="userform" novalidate submit-attempt submit-validate="createFirstUser()">
+      <div class="form-group" 
+        ng-class="{'has-error': userform.username.$invalid && 
+          (userform.username.$dirty || attributesObject.userform.attempted)}">
+        <label for="username">Username:</label>
+        <input name="username" class="form-control" id="username" ng-model="newUser.userName" required />
+        <span class="help-block" 
+          ng-show="userform.username.$error.required && 
+            (userform.username.$dirty || attributesObject.userform.attempted)">
+          Please enter a unique username to identify your account.
+        </span>
+      </div>
+      <div class="form-group" 
+        ng-class="{'has-error': userform.password.$invalid && 
+          (userform.password.$dirty || attributesObject.userform.attempted)}">
+        <label for="password">Password:</label>
+        <input type="password" name="password" class="form-control" id="password" required ng-model="newUser.password" />
+        <span class="help-block" 
+          ng-show="userform.password.$error.required && 
+            (userform.password.$dirty || attributesObject.userform.attempted)">
+          Please enter a strong password to secure your account.
+        </span>
+      </div>
+      <div class="form-group" 
+        ng-class="{'has-error': userform.password_confirmation.$invalid && 
+          (userform.password_confirmation.$dirty || attributesObject.userform.attempted)}">
+        <label for="password_confirmation">Password Confirmation:</label>
+        <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" required ng-model="newUser.passwordConfirm" />
+        <span class="help-block" 
+          ng-show="userform.password_confirmation.$error.required && 
+            (userform.password_confirmation.$dirty || attributesObject.userform.attempted)">
+            Passwords must match.
+          </span>
+      </div>
+      <button type="submit" class="btn btn-primary pull-right">Next Step >></button>
+    </form>
+
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SECA Mocha Tests</title>
+    <script type="text/javascript" src="../../../node_modules/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../node_modules/mocha/mocha.css">
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script type="text/javascript">
+      (function () {
+
+        var Mocha = require('mocha');
+        var mocha = new Mocha();
+        mocha.ui('bdd').reporter('html');
+
+        var fs = require('fs');
+        var path = require('path');
+        fs.readdirSync('test/mocha/specs').filter(function(file){
+          // Only keep the .js files
+          return file.substr(-3) === '.js';
+
+        }).forEach(function(file){
+          // Use the method "addFile" to add the file to mocha
+          mocha.addFile(
+            path.join('test/mocha/specs', file)
+          );
+        });
+
+        mocha.run();
+        
+      })();
+    </script>
+  </body>
+</html>

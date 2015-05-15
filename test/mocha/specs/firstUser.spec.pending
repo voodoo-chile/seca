@@ -1,9 +1,7 @@
-var Browser = require('zombie');
-var should = require('should');
+var angular = require('angular');
 var glob = require('glob');
 var fs = require('fs');
 var path = require('path');
-var app = require('../../lib/app/app');
 
 function userFormFill (browser, username, password, password_confirmation) {
   browser
@@ -12,24 +10,32 @@ function userFormFill (browser, username, password, password_confirmation) {
     .fill('form input[name=password_confirmation]', password_confirmation);
 }
 
-Browser.localhost('seca.io', 3000);
-
-describe('Web application', function () {
+describe('Starting the app for the first time', function () {
   
-  const browser = new Browser();
-
-  before(function (done) {
+  before(function () {
     fs.readdirSync('./data').forEach(function(fileName) {
       if (path.extname(fileName) === ".user") {
         fs.unlinkSync('data/' + fileName);
       }
     });
-    app.listen(3000);
-    browser.visit('/', done);
   });
+
+
+  beforeEach(function () {
+    angular.module('app');
+  });
+
+  var appCtrl;
+  var scope;
+
+  beforeEach(inject(function ($rootScope, $controller) {
+    scope = $rootScope.$new();
+    appCtrl = $controller('appCtrl', {
+      $scope: scope
+    });
+  }));
 
   after(function () {
-    app.close();
     fs.readdirSync('./data').forEach(function(fileName) {
       if (path.extname(fileName) === ".user") {
         fs.unlinkSync('data/' + fileName);
@@ -37,17 +43,12 @@ describe('Web application', function () {
     });
   });
 
-  describe('when connected for the first time', function () {
+  describe('no user file is found', function () {
 
-    it('results in the "first user" form', function () {
-      browser.assert.text('title', 'Welcome to SECA :: Create a User');
-      browser.assert.elements('form', 1);
-      browser.assert.elements('form input', 3);
-    });
-  
-  });
-
-  describe('first user form', function () {
+    it('recognizes this as first use', function () {
+      console.log(scope);
+      scope.bodyPartial.should.equal('firstUser');
+    });  describe('first user form', function () {
 
     it('has an input for a username', function () {
       browser.assert.element('form input[name=username]');
@@ -118,7 +119,7 @@ describe('Web application', function () {
       });
 
     });
-
+  
   });
 
 });
