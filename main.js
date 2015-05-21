@@ -78,9 +78,13 @@ app.on('ready', function() {
 
   ipc.on('getUserData', function (event, userName, password) {
     userFile.open(app.getPath('userData'), userName, password, function (userObject) {
-      event.returnValue = userObject;
-    })
-  })
+      if (userObject === false) {
+        event.returnValue = 'incorrect password';
+      } else {
+        event.returnValue = userObject;
+      }
+    });
+  });
 
   ipc.on('createNewUser', function (event, userName, password) {
     userFile.newUser(app.getPath('userData'), userName, password);

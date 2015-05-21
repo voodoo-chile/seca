@@ -48,6 +48,23 @@ angular.module('app', [])
   $scope.angularStatus = true;
 
   $scope.currentUser = null;
+  $scope.login = {};
+
+  $scope.userLogin = function () {
+    console.log('sending request for: ' + $scope.login.userChoice);
+    var userObject = ipc.sendSync('getUserData', $scope.login.userChoice, $scope.login.password);
+    if (userObject != 'incorrect password') {
+      $scope.currentUser = userObject.userName;
+      $scope.currentRole = {
+        roleName: userObject.roles[0].roleName,
+        displayName: userObject.roles[0].displayName
+      }
+      $scope.bodyPartial = 'partials/chat.tmpl';
+    } else {
+      $scope.login.password = '';
+      $scope.login.invalidPassword = true;
+    }
+  };
 
   $scope.$on('created first user', function (event, args) {
     $scope.currentUser = args.userName;
@@ -66,15 +83,6 @@ angular.module('app', [])
       $scope.firstUse = true;
       $scope.bodyPartial = 'partials/firstUser.tmpl';
     } else {
-      var userChoice = $scope.users[0];
-      var password = 'pass';
-      var userObject = ipc.sendSync('getUserData', userChoice, password);
-      //$scope.userObject = userObject;
-      $scope.currentUser = userObject.userName;
-      $scope.currentRole = {
-        roleName: userObject.roles[0].roleName,
-        displayName: userObject.roles[0].displayName
-      }
       $scope.bodyPartial = 'partials/hello.tmpl';
     }
   }

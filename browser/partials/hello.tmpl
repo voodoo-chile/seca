@@ -1,21 +1,24 @@
-<form id="userform">
+<p>Please enter your username and password to continue</p>
 
-  <!-- {{userObject}} -->
-  
+<form id="userform" name="userform" novalidate submit-attempt submit-validate="userLogin()">  
   <div class="form-group">
     <label for="username">Username:</label>
-    <select class="form-control" ng-model="userChoice" ng-options="user for user in users"></select>
-    <div class="help-block with-errors"></div>
+    <select class="form-control" ng-model="login.userChoice" ng-options="user for user in users"></select>
   </div>
 
-  <div class="form-group">
+  <div class="form-group" ng-class="{'has-error': userform.password.$invalid && (userform.password.$dirty || attributesObject.userform.attempted)}">
     <label for="password">Password:</label>
-    <input type="password" name="password" class="form-control" id="password" required data-error="Make this a strong password for your security" ng-model="password" />
-    <div class="help-block with-errors"></div>
+    <input type="password" name="password" class="form-control" id="password" required ng-model="login.password" />
+    <span class="help-block" 
+      ng-show="userform.password.$error.required && 
+        (userform.password.$dirty || attributesObject.userform.attempted) &&
+        !login.invalidPassword">
+      Please enter the password for that user account.
+    </span>
+    <span class="help-block" 
+      ng-show="login.invalidPassword">
+      Invalid password for that user.
+    </span>
   </div>
-  <button class="btn btn-primary" ng-click="createFirstUser()">Go!</button>
+  <button class="btn btn-primary">Go!</button>
 </form>
-
-<h1>Hello, {{currentUser}}!</h1>
-
-<p>Your first role is {{currentRole.roleName}}, but it will be displayed as {{currentRole.displayName}}.</p>

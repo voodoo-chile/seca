@@ -6,6 +6,7 @@ var glob = require('glob');
 var NodeRSA = require('node-rsa');
 var crypto = require('crypto');
 var algorithm = 'aes-256-ctr';
+var userFileSecret = 'Success!';
 
 function encrypt(text, password){
   var cipher = crypto.createCipher(algorithm,password)
@@ -43,7 +44,12 @@ UserFile.prototype.open = function (path, userName, password, callback) {
       throw new Error(er);
     } else {
       var plainText = decrypt(data, that.password);
-      that.userObject = JSON.parse(plainText);
+      try {
+        that.userObject = JSON.parse(plainText);
+      }
+      catch(err) {
+        that.userObject = false;
+      } 
       callback(that.userObject);
     }
   });
@@ -52,7 +58,11 @@ UserFile.prototype.open = function (path, userName, password, callback) {
 UserFile.prototype.newUser = function (path, userName, password) {
   console.log('creating new user');
   this.file = path + '/' + userName + '.user';
-  this.userObject = {userName: userName, roles: []};
+  this.userObject = {
+    secret: userFileSecret, 
+    userName: userName, 
+    roles: []
+  };
   this.password = password;
   var plainText = JSON.stringify(this.userObject);
   var cipherText = encrypt(plainText, this.password);
